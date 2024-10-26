@@ -1,0 +1,25 @@
+---
+- name: Backup important files
+  hosts: localhost
+  become: yes
+  vars:
+    source_directory: "/path/to/source"      # Replace with the directory you want to back up
+    backup_directory: "/path/to/backup"      # Replace with your backup destination
+
+  tasks:
+    - name: Create backup directory if it doesn't exist
+      file:
+        path: "{{ backup_directory }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copy files to backup directory
+      synchronize:
+        src: "{{ source_directory }}/"
+        dest: "{{ backup_directory }}/{{ ansible_date_time.iso8601 }}"
+        archive: true
+        delete: false
+
+    - name: Print success message
+      debug:
+        msg: "Backup completed successfully! Files from {{ source_directory }} are now backed up to {{ backup_directory }}"
