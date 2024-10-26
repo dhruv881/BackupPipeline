@@ -3,8 +3,8 @@
   hosts: localhost
   become: yes
   vars:
-    source_directory: "/path/to/source"      # Replace with the directory you want to back up
-    backup_directory: "/path/to/backup"      # Replace with your backup destination
+    source_directory: "/home/ubuntu/folder1"      # Replace with the directory you want to back up
+    backup_directory: "/home/ubuntu/folder2"      # Replace with your backup destination
 
   tasks:
     - name: Create backup directory if it doesn't exist
