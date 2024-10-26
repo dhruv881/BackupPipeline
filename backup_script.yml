@@ -1,28 +1,25 @@
-pipeline {
-    agent any
-    parameters {
-        string(name: 'BACKUP_DESTINATION', defaultValue: '/home/ubuntu/folder2', description: 'Destination path where to copy the backup')
-    }
-    environment {
-        ANSIBLE_HOST = 'localhost'
-    }
-    stages {
-        stage('Checkout') {
-            steps {
-                git credentialsId: 'github-token', url: 'https://github.com/dhruv881/BackupPipeline.git', branch: 'main'
-            }
-        }
-        
-        stage('Run Backup Script with Ansible') {
-            steps {
-                ansiblePlaybook(
-                    installation: 'Ansible',
-                    playbook: 'backup_script.yml',
-                    extraVars: [
-                        backup_directory: "${params.BACKUP_DESTINATION}"
-                    ]
-                )
-            }
-        }
-    }
-}
+---
+- name: Backup important files
+  hosts: localhost
+  become: yes
+  vars:
+    source_directory: "/home/ubuntu/folder1"  # Replace with the directory you want to back up
+    backup_directory: "{{ backup_directory }}" # This variable is now set from Jenkins
+
+  tasks:
+    - name: Create backup directory if it doesn't exist
+      file:
+        path: "{{ backup_directory }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copy files to backup directory
+      synchronize:
+        src: "{{ source_directory }}/"
+        dest: "{{ backup_directory }}/"
+        archive: true
+        delete: false
+
+    - name: Print success message
+      debug:
+        msg: "Backup completed successfully! Files from {{ source_directory }} are now backed up to {{ backup_directory }}"
