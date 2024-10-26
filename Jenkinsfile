@@ -4,9 +4,9 @@ pipeline {
         ANSIBLE_HOST = 'localhost'
     }
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/yourusername/yourrepo.git'
+                git credentialsId: 'github-token', url: 'https://github.com/dhruv881/BackupPipeline.git'
             }
         }
         
