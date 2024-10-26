@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: 'github-token', url: 'https://github.com/dhruv881/BackupPipeline.git'
+                git credentialsId: 'github-token', url: 'https://github.com/dhruv881/BackupPipeline.git', branch: 'main'
             }
         }
         
